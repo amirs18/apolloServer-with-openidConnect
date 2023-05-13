@@ -47,6 +47,16 @@ const server = new ApolloServer({
 //  2. installs your ApolloServer instance as middleware
 //  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
+    context: async ({ req, res }) => {
+        const token = req.headers.authorization || '';
+        // Try to retrieve a user with the token
+        const user = await getUser(token);
+        // Add the user to the context
+        return { user };
+    },
     listen: { port: 4000 },
 });
 console.log(`🚀  Server ready at: ${url}`);
+function getUser(token) {
+    return "amir";
+}

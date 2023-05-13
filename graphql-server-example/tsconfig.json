@@ -1,4 +1,8 @@
 {
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
+      },
     "compilerOptions": {
       "rootDirs": ["src"],
       "outDir": "dist",
@@ -7,6 +11,6 @@
       "module": "esnext",
       "moduleResolution": "node",
       "esModuleInterop": true,
-      "types": ["node"]
+      "types": ["node"],
     }
   }

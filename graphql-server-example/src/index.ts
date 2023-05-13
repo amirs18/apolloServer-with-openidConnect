@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { GraphQLError } from 'graphql/error';
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -49,7 +50,28 @@ const server = new ApolloServer({
   //  2. installs your ApolloServer instance as middleware
   //  3. prepares your app to handle incoming requests
   const { url } = await startStandaloneServer(server, {
+    context:async({req,res})=>{
+     const token = req.headers.authorization || '';
+
+    // Try to retrieve a user with the token
+    const user = await getUser(token);
+    if (!user)
+      // throwing a `GraphQLError` here allows us to specify an HTTP status code,
+      // standard `Error`s will have a 500 status code by default
+      throw new GraphQLError('User is not authenticated', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        },
+      });
+    // Add the user to the context
+    return { user };
+    },
     listen: { port: 4000 },
   });
   
   console.log(`🚀  Server ready at: ${url}`);
+
+function getUser(token: string) {
+    return null
+}
