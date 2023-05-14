@@ -6,7 +6,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { typeDefs, resolvers } from 'schema';
+import { typeDefs } from './schema';
 import {auth} from 'express-openid-connect'
 
 
@@ -25,7 +25,6 @@ const httpServer = http.createServer(app);
 // for our httpServer.
 const server = new ApolloServer<MyContext>({
   typeDefs,
-  resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 // Ensure we wait for our server to start
@@ -35,7 +34,7 @@ await server.start();
 // and our expressMiddleware function.
 app.use(auth({
   issuerBaseURL: 'https://dev-nptz4bprn2bncygi.us.auth0.com',
-    baseURL: 'https://localhost:4000',
+    baseURL: 'https://4000-amirs18-apolloserverwit-ar5ztutcpf4.ws-us97.gitpod.io',
     clientID: 'TZNy8ZXVocuI28HPu3sIhB6CpRRF0yBf',
     secret: 'elVw82HSLVJOuaYDpixJfyYbdtY2r2CSL77K0Ss9jBjqDd1jImwgJVKY8ZgwZVYu',
     idpLogout: true,

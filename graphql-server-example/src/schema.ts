@@ -1,3 +1,7 @@
+import { gql } from "graphql-tag";
+
+export const typeDefs = gql`
+
 type Query {
   books: [Book]
 }
@@ -17,3 +21,4 @@ type AddBookMutationResponse {
 type Mutation {
   addBook(title: String, author: String): AddBookMutationResponse
 }
+`;
