@@ -40,17 +40,29 @@ app.use(auth({
     idpLogout: true,
 }))
 app.use(
-  '/',
+  '/graphql',
   cors<cors.CorsRequest>(),
   // 50mb is the limit that `startStandaloneServer` uses, but you may configure this to suit your needs
   bodyParser.json({ limit: '50mb' }),
   // expressMiddleware accepts the same arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
-    context: async ({ req }) => ({ token: req.headers.token }),
-  }),
+    context: async ({ req, res }) => {
+      // Get the user token from the headers.
+      const token = req.oidc.idToken as unknown as string || 'blah';
+  
+      // Try to retrieve a user with the token
+      const user = await getUser(token);
+  
+      // Add the user to the context
+      return { user };
+    },  }),
 );
 
 // Modified server startup
 await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
 console.log(`🚀 Server ready at http://localhost:4000/`);
+
+function getUser(token: string) {
+// console.log(token);
+}
